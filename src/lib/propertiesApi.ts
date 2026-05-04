@@ -24,11 +24,17 @@ function toErrorMessage(err: unknown): string {
   return '不明なエラー'
 }
 
+const missingClientError =
+  'Supabase の接続設定がありません。環境変数を確認してください。'
+
 /** ログインユーザー自身の物件一覧（RLS によりサーバー側でも絞り込み） */
 export async function fetchProperties(): Promise<{
   data: Property[] | null
   error: string | null
 }> {
+  if (!supabase) {
+    return { data: null, error: missingClientError }
+  }
   const { data, error } = await supabase
     .from('properties')
     .select('*')
@@ -45,6 +51,9 @@ export async function fetchProperties(): Promise<{
 export async function createProperty(
   input: PropertyInput,
 ): Promise<{ data: Property | null; error: string | null }> {
+  if (!supabase) {
+    return { data: null, error: missingClientError }
+  }
   // API リクエストと同じセッションを使う（getUser だけだと JWT とずれることがある）
   const {
     data: { session },
@@ -81,6 +90,9 @@ export async function updateProperty(
   id: string,
   input: PropertyInput,
 ): Promise<{ data: Property | null; error: string | null }> {
+  if (!supabase) {
+    return { data: null, error: missingClientError }
+  }
   const { data, error } = await supabase
     .from('properties')
     .update({
@@ -103,6 +115,9 @@ export async function updateProperty(
 export async function deleteProperty(
   id: string,
 ): Promise<{ error: string | null }> {
+  if (!supabase) {
+    return { error: missingClientError }
+  }
   const { error } = await supabase.from('properties').delete().eq('id', id)
   if (error) {
     return { error: toErrorMessage(error) }

@@ -22,6 +22,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) {
+      setSession(null)
+      setLoading(false)
+      return
+    }
+
     // 初期セッション取得
     void supabase.auth.getSession().then(({ data: { session: initial } }) => {
       setSession(initial)
@@ -39,6 +45,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   const signIn = useCallback(async (email: string, password: string) => {
+    if (!supabase) {
+      return { error: new Error('Supabase の接続設定がありません。') }
+    }
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     return {
       error: error ? new Error(toAuthUserMessage(error.message)) : null,
@@ -46,6 +55,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   const signUp = useCallback(async (email: string, password: string) => {
+    if (!supabase) {
+      return { error: new Error('Supabase の接続設定がありません。') }
+    }
     const { error } = await supabase.auth.signUp({ email, password })
     return {
       error: error ? new Error(toAuthUserMessage(error.message)) : null,
@@ -53,6 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   const signOut = useCallback(async () => {
+    if (!supabase) return
     await supabase.auth.signOut()
   }, [])
 

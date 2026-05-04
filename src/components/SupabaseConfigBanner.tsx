@@ -12,10 +12,12 @@ export function SupabaseConfigBanner() {
     <div className="config-banner" role="status">
       <strong>Supabase の接続設定が必要です。</strong>
       <span>
-        プロジェクト直下の <code className="config-banner__code">.env</code> 内の{' '}
+        ローカルではプロジェクト直下の <code className="config-banner__code">.env</code> に{' '}
         <code className="config-banner__code">VITE_SUPABASE_URL</code> と{' '}
         <code className="config-banner__code">VITE_SUPABASE_PUBLISHABLE_KEY</code>{' '}
-        を、Supabase ダッシュボードの「Settings（設定）」→「API Keys」で確認できる実際の値に差し替えてください。編集後は{' '}
+        を設定してください。本番（Vercel）では Project Settings → Environment
+        Variables に同じ名前で登録し、再デプロイしてください。値は Supabase の「Settings」→「API
+        Keys」で確認できます。ローカルで .env を編集したら{' '}
         <code className="config-banner__code">npm run dev</code> を再起動してください。
       </span>
     </div>

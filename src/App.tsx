@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthProvider'
+import { SupabaseConfigBanner } from './components/SupabaseConfigBanner'
 import { GuestRoute } from './components/GuestRoute'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { LoginPage } from './pages/LoginPage'
@@ -44,6 +45,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <SupabaseConfigBanner />
       <AuthProvider>
         <AppRoutes />
       </AuthProvider>
