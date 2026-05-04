@@ -29,10 +29,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     // 初期セッション取得
-    void supabase.auth.getSession().then(({ data: { session: initial } }) => {
-      setSession(initial)
-      setLoading(false)
-    })
+    void supabase.auth
+      .getSession()
+      .then(({ data: { session: initial } }) => {
+        setSession(initial)
+        setLoading(false)
+      })
+      .catch((e) => {
+        console.error('[auth] getSession failed', e)
+        setSession(null)
+        setLoading(false)
+      })
 
     // ログイン・ログアウト・トークン更新を監視
     const {
